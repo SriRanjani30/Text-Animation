@@ -17,7 +17,17 @@
 
         #content {
             text-align: center;
-            transition: transform 1s, text-shadow 1s, border 1s, padding 1s, margin 1s, opacity 1s;
+            transition: 
+                transform 1s, 
+                text-shadow 1s, 
+                border 1s, 
+                padding 1s, 
+                margin 1s, 
+                opacity 1s, 
+                border-radius 1s, 
+                letter-spacing 1s, 
+                word-spacing 1s, 
+                box-shadow 1s;
         }
 
         @keyframes blink {
@@ -91,6 +101,42 @@
             return `linear-gradient(${angle}deg, ${color1}, ${color2})`;
         }
 
+        function getRandomBorderRadius() {
+            return Math.floor(Math.random() * 50) + 'px';
+        }
+
+        function getRandomTextDecoration() {
+            const decorations = ['none', 'underline', 'overline', 'line-through'];
+            return decorations[Math.floor(Math.random() * decorations.length)];
+        }
+
+        function getRandomLetterSpacing() {
+            return Math.floor(Math.random() * 10) + 'px';
+        }
+
+        function getRandomWordSpacing() {
+            return Math.floor(Math.random() * 20) + 'px';
+        }
+
+        function getRandomTextAlignment() {
+            const alignments = ['left', 'center', 'right', 'justify'];
+            return alignments[Math.floor(Math.random() * alignments.length)];
+        }
+
+        function getRandomBoxShadow() {
+            const hShadow = Math.floor(Math.random() * 20) + 'px';
+            const vShadow = Math.floor(Math.random() * 20) + 'px';
+            const blur = Math.floor(Math.random() * 20) + 'px';
+            const spread = Math.floor(Math.random() * 10) + 'px';
+            const color = getRandomColor();
+            return `${hShadow} ${vShadow} ${blur} ${spread} ${color}`;
+        }
+
+        function getRandomTextTransform() {
+            const transforms = ['none', 'uppercase', 'lowercase', 'capitalize'];
+            return transforms[Math.floor(Math.random() * transforms.length)];
+        }
+
         function changeStyles() {
             const content = document.getElementById('content');
             const paragraphs = content.getElementsByTagName('p');
@@ -102,6 +148,11 @@
                 paragraphs[i].style.textShadow = getRandomTextShadow();
                 paragraphs[i].style.opacity = getRandomOpacity();
                 paragraphs[i].style.animation = 'blink 1s infinite';
+                paragraphs[i].style.textDecoration = getRandomTextDecoration();
+                paragraphs[i].style.letterSpacing = getRandomLetterSpacing();
+                paragraphs[i].style.wordSpacing = getRandomWordSpacing();
+                paragraphs[i].style.textAlign = getRandomTextAlignment();
+                paragraphs[i].style.textTransform = getRandomTextTransform();
             }
 
             document.body.style.background = getRandomGradient();
@@ -109,6 +160,8 @@
             content.style.border = getRandomBorder();
             content.style.padding = getRandomPadding();
             content.style.margin = getRandomMargin();
+            content.style.borderRadius = getRandomBorderRadius();
+            content.style.boxShadow = getRandomBoxShadow();
         }
 
         setInterval(changeStyles, 1000);
