@@ -13,6 +13,34 @@
             margin: 0;
             font-family: Arial, sans-serif;
             transition: background 1s;
+            position: relative;
+        }
+
+        #menu-icon {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 30px;
+            cursor: pointer;
+        }
+
+        .bar {
+            width: 100%;
+            height: 5px;
+            background-color: #333;
+            margin: 6px 0;
+            transition: 0.4s;
+        }
+
+        #menu {
+            display: none;
+            position: absolute;
+            top: 50px;
+            right: 10px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
 
         #content {
@@ -27,7 +55,8 @@
                 border-radius 1s, 
                 letter-spacing 1s, 
                 word-spacing 1s, 
-                box-shadow 1s;
+                box-shadow 1s,
+                background-color 1s;
         }
 
         @keyframes blink {
@@ -38,9 +67,21 @@
     </style>
 </head>
 <body>
-    <div id="content">
-        <p>This is some text that will change size and color every second.</p>
+    <div id="menu-icon" onclick="toggleMenu()">
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
     </div>
+
+    <div id="menu">
+        <input type="text" id="userInput" placeholder="Enter new text here">
+        <button onclick="changeUserText()">Change Text</button>
+    </div>
+
+    <div id="content">
+        <p id="text">This is some text that will change size and color every second.</p>
+    </div>
+
     <script>
         function getRandomColor() {
             const letters = '0123456789ABCDEF';
@@ -137,31 +178,59 @@
             return transforms[Math.floor(Math.random() * transforms.length)];
         }
 
+        function getRandomScale() {
+            const scale = (Math.random() * 1.5) + 0.5;
+            return `scale(${scale})`;
+        }
+
+        function getRandomSkew() {
+            const skewX = Math.floor(Math.random() * 60) - 30;
+            const skewY = Math.floor(Math.random() * 60) - 30;
+            return `skew(${skewX}deg, ${skewY}deg)`;
+        }
+
+        function getRandomTransform() {
+            const transforms = [getRandomRotation(), getRandomScale(), getRandomSkew()];
+            return transforms.join(' ');
+        }
+
         function changeStyles() {
             const content = document.getElementById('content');
-            const paragraphs = content.getElementsByTagName('p');
-
-            for (let i = 0; i < paragraphs.length; i++) {
-                paragraphs[i].style.color = getRandomColor();
-                paragraphs[i].style.fontSize = getRandomFontSize() + 'px';
-                paragraphs[i].style.fontFamily = getRandomFontFamily();
-                paragraphs[i].style.textShadow = getRandomTextShadow();
-                paragraphs[i].style.opacity = getRandomOpacity();
-                paragraphs[i].style.animation = 'blink 1s infinite';
-                paragraphs[i].style.textDecoration = getRandomTextDecoration();
-                paragraphs[i].style.letterSpacing = getRandomLetterSpacing();
-                paragraphs[i].style.wordSpacing = getRandomWordSpacing();
-                paragraphs[i].style.textAlign = getRandomTextAlignment();
-                paragraphs[i].style.textTransform = getRandomTextTransform();
-            }
-
+            const text = document.getElementById('text');
+            
+            text.style.color = getRandomColor();
+            text.style.fontSize = getRandomFontSize() + 'px';
+            text.style.fontFamily = getRandomFontFamily();
+            text.style.textShadow = getRandomTextShadow();
+            text.style.opacity = getRandomOpacity();
+            text.style.animation = 'blink 1s infinite';
+            text.style.textDecoration = getRandomTextDecoration();
+            text.style.letterSpacing = getRandomLetterSpacing();
+            text.style.wordSpacing = getRandomWordSpacing();
+            text.style.textAlign = getRandomTextAlignment();
+            text.style.textTransform = getRandomTextTransform();
+            text.style.backgroundColor = getRandomColor();
+            
             document.body.style.background = getRandomGradient();
-            content.style.transform = getRandomRotation();
+            content.style.transform = getRandomTransform();
             content.style.border = getRandomBorder();
             content.style.padding = getRandomPadding();
             content.style.margin = getRandomMargin();
             content.style.borderRadius = getRandomBorderRadius();
             content.style.boxShadow = getRandomBoxShadow();
+        }
+
+        function changeUserText() {
+            const userInput = document.getElementById('userInput').value;
+            const text = document.getElementById('text');
+            if (userInput.trim() !== "") {
+                text.textContent = userInput;
+            }
+        }
+
+        function toggleMenu() {
+            const menu = document.getElementById('menu');
+            menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
         }
 
         setInterval(changeStyles, 1000);
