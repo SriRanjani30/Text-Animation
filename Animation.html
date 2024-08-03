@@ -12,10 +12,18 @@
             height: 100vh;
             margin: 0;
             font-family: Arial, sans-serif;
+            transition: background 1s;
         }
 
         #content {
             text-align: center;
+            transition: transform 1s, text-shadow 1s, border 1s, padding 1s, margin 1s, opacity 1s;
+        }
+
+        @keyframes blink {
+            0% { opacity: 1; }
+            50% { opacity: 0; }
+            100% { opacity: 1; }
         }
     </style>
 </head>
@@ -39,17 +47,71 @@
             return Math.floor(Math.random() * (maxSize - minSize + 1)) + minSize;
         }
 
-        function changeFontStyles() {
+        function getRandomFontFamily() {
+            const fonts = ['Arial', 'Verdana', 'Helvetica', 'Times New Roman', 'Courier New', 'Georgia', 'Palatino', 'Garamond', 'Comic Sans MS', 'Trebuchet MS'];
+            return fonts[Math.floor(Math.random() * fonts.length)];
+        }
+
+        function getRandomTextShadow() {
+            const hShadow = Math.floor(Math.random() * 10) + 'px';
+            const vShadow = Math.floor(Math.random() * 10) + 'px';
+            const blur = Math.floor(Math.random() * 10) + 'px';
+            const color = getRandomColor();
+            return `${hShadow} ${vShadow} ${blur} ${color}`;
+        }
+
+        function getRandomRotation() {
+            const degrees = Math.floor(Math.random() * 360);
+            return `rotate(${degrees}deg)`;
+        }
+
+        function getRandomBorder() {
+            const width = Math.floor(Math.random() * 5) + 'px';
+            const style = ['solid', 'dotted', 'dashed', 'double'][Math.floor(Math.random() * 4)];
+            const color = getRandomColor();
+            return `${width} ${style} ${color}`;
+        }
+
+        function getRandomPadding() {
+            return Math.floor(Math.random() * 20) + 'px';
+        }
+
+        function getRandomMargin() {
+            return Math.floor(Math.random() * 20) + 'px';
+        }
+
+        function getRandomOpacity() {
+            return Math.random().toFixed(1);
+        }
+
+        function getRandomGradient() {
+            const color1 = getRandomColor();
+            const color2 = getRandomColor();
+            const angle = Math.floor(Math.random() * 360);
+            return `linear-gradient(${angle}deg, ${color1}, ${color2})`;
+        }
+
+        function changeStyles() {
             const content = document.getElementById('content');
             const paragraphs = content.getElementsByTagName('p');
-            
+
             for (let i = 0; i < paragraphs.length; i++) {
                 paragraphs[i].style.color = getRandomColor();
                 paragraphs[i].style.fontSize = getRandomFontSize() + 'px';
+                paragraphs[i].style.fontFamily = getRandomFontFamily();
+                paragraphs[i].style.textShadow = getRandomTextShadow();
+                paragraphs[i].style.opacity = getRandomOpacity();
+                paragraphs[i].style.animation = 'blink 1s infinite';
             }
+
+            document.body.style.background = getRandomGradient();
+            content.style.transform = getRandomRotation();
+            content.style.border = getRandomBorder();
+            content.style.padding = getRandomPadding();
+            content.style.margin = getRandomMargin();
         }
 
-        setInterval(changeFontStyles, 1000);
+        setInterval(changeStyles, 1000);
     </script>
 </body>
 </html>
