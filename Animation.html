@@ -56,13 +56,31 @@
                 letter-spacing 1s, 
                 word-spacing 1s, 
                 box-shadow 1s,
-                background-color 1s;
+                background-color 1s,
+                color 1s;
+            animation: pulse 2s infinite, rotate 5s infinite linear, move 3s infinite alternate;
         }
 
         @keyframes blink {
             0% { opacity: 1; }
             50% { opacity: 0; }
             100% { opacity: 1; }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes move {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-20px); }
         }
     </style>
 </head>
@@ -76,6 +94,8 @@
     <div id="menu">
         <input type="text" id="userInput" placeholder="Enter new text here">
         <button onclick="changeUserText()">Change Text</button>
+        <button onclick="startAnimation()">Start Animation</button>
+        <button onclick="stopAnimation()">Stop Animation</button>
     </div>
 
     <div id="content">
@@ -83,6 +103,8 @@
     </div>
 
     <script>
+        let animationInterval;
+
         function getRandomColor() {
             const letters = '0123456789ABCDEF';
             let color = '#';
@@ -93,20 +115,26 @@
         }
 
         function getRandomFontSize() {
-            const minSize = 10;
-            const maxSize = 50;
+            const minSize = 20;
+            const maxSize = 100;
             return Math.floor(Math.random() * (maxSize - minSize + 1)) + minSize;
         }
 
         function getRandomFontFamily() {
-            const fonts = ['Arial', 'Verdana', 'Helvetica', 'Times New Roman', 'Courier New', 'Georgia', 'Palatino', 'Garamond', 'Comic Sans MS', 'Trebuchet MS'];
+            const fonts = [
+                'Arial', 'Verdana', 'Helvetica', 'Times New Roman', 
+                'Courier New', 'Georgia', 'Palatino', 'Garamond', 
+                'Comic Sans MS', 'Trebuchet MS', 'Impact', 'Brush Script MT', 
+                'Lucida Console', 'Tahoma', 'Futura', 'Chalkduster', 
+                'Copperplate', 'Papyrus', 'Gill Sans', 'Optima'
+            ];
             return fonts[Math.floor(Math.random() * fonts.length)];
         }
 
         function getRandomTextShadow() {
-            const hShadow = Math.floor(Math.random() * 10) + 'px';
-            const vShadow = Math.floor(Math.random() * 10) + 'px';
-            const blur = Math.floor(Math.random() * 10) + 'px';
+            const hShadow = Math.floor(Math.random() * 15) + 'px';
+            const vShadow = Math.floor(Math.random() * 15) + 'px';
+            const blur = Math.floor(Math.random() * 30) + 'px';
             const color = getRandomColor();
             return `${hShadow} ${vShadow} ${blur} ${color}`;
         }
@@ -117,18 +145,18 @@
         }
 
         function getRandomBorder() {
-            const width = Math.floor(Math.random() * 5) + 'px';
-            const style = ['solid', 'dotted', 'dashed', 'double'][Math.floor(Math.random() * 4)];
+            const width = Math.floor(Math.random() * 10) + 'px';
+            const style = ['solid', 'dotted', 'dashed', 'double', 'groove', 'ridge', 'inset', 'outset'][Math.floor(Math.random() * 8)];
             const color = getRandomColor();
             return `${width} ${style} ${color}`;
         }
 
         function getRandomPadding() {
-            return Math.floor(Math.random() * 20) + 'px';
+            return Math.floor(Math.random() * 40) + 'px';
         }
 
         function getRandomMargin() {
-            return Math.floor(Math.random() * 20) + 'px';
+            return Math.floor(Math.random() * 40) + 'px';
         }
 
         function getRandomOpacity() {
@@ -143,20 +171,20 @@
         }
 
         function getRandomBorderRadius() {
-            return Math.floor(Math.random() * 50) + 'px';
+            return Math.floor(Math.random() * 100) + 'px';
         }
 
         function getRandomTextDecoration() {
-            const decorations = ['none', 'underline', 'overline', 'line-through'];
+            const decorations = ['none', 'underline', 'overline', 'line-through', 'blink', 'wavy', 'dashed'];
             return decorations[Math.floor(Math.random() * decorations.length)];
         }
 
         function getRandomLetterSpacing() {
-            return Math.floor(Math.random() * 10) + 'px';
+            return Math.floor(Math.random() * 15) + 'px';
         }
 
         function getRandomWordSpacing() {
-            return Math.floor(Math.random() * 20) + 'px';
+            return Math.floor(Math.random() * 30) + 'px';
         }
 
         function getRandomTextAlignment() {
@@ -165,10 +193,10 @@
         }
 
         function getRandomBoxShadow() {
-            const hShadow = Math.floor(Math.random() * 20) + 'px';
-            const vShadow = Math.floor(Math.random() * 20) + 'px';
-            const blur = Math.floor(Math.random() * 20) + 'px';
-            const spread = Math.floor(Math.random() * 10) + 'px';
+            const hShadow = Math.floor(Math.random() * 30) + 'px';
+            const vShadow = Math.floor(Math.random() * 30) + 'px';
+            const blur = Math.floor(Math.random() * 30) + 'px';
+            const spread = Math.floor(Math.random() * 20) + 'px';
             const color = getRandomColor();
             return `${hShadow} ${vShadow} ${blur} ${spread} ${color}`;
         }
@@ -179,7 +207,7 @@
         }
 
         function getRandomScale() {
-            const scale = (Math.random() * 1.5) + 0.5;
+            const scale = (Math.random() * 2) + 0.5;
             return `scale(${scale})`;
         }
 
@@ -233,7 +261,20 @@
             menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
         }
 
-        setInterval(changeStyles, 1000);
+        function startAnimation() {
+            if (!animationInterval) {
+                animationInterval = setInterval(changeStyles, 1000);
+            }
+        }
+
+        function stopAnimation() {
+            if (animationInterval) {
+                clearInterval(animationInterval);
+                animationInterval = null;
+            }
+        }
+
+        window.onload = startAnimation;
     </script>
 </body>
 </html>
